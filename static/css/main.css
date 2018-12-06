@@ -1,0 +1,42 @@
+.MarginT_40{
+	margin-top: 40px;
+}
+.MarginT_5{
+	margin-top: 5px;
+}
+.MarginT_10{
+	margin-top: 10px;
+}
+.MarginT_20{
+	margin-top: 20px;
+}
+.PaddingL_10{
+	padding-left: 10px !important;
+}
+.TextAlign_C{
+	text-align: center !important;
+}
+.TextAlign_L{
+	text-align: left !important;
+}
+.SmallSize{
+	font-size: 12px !important;
+}
+.SmallSize_14{
+	font-size: 14px !important;
+}
+.SmallSize_12{
+	font-size: 12px !important;
+}
+.FontBold{
+	font-weight: bold;
+}
+.ColorR{
+	color: red;
+}
+.BorderBottom{
+	border-bottom: 1px solid #ccc;
+}
+.van-tabbar-item--active{
+	color: cadetblue !important;
+}

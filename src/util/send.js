@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { Toast } from 'vant'
 
-const URL_PREFIX = 'http://fanjia1688.com/qwdzJK/'
-// const URL_PREFIX = 'http://www.btzoon.com/qwdzJK/'
+const URL_PREFIX = 'http://fanjia1688.com/qwdzJK'
+// const URL_PREFIX = 'http://205.168.1.105:8081/qwdzJK'
 
 let registerId = localStorage['registerId']
 let account = localStorage['account']

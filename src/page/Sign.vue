@@ -78,7 +78,8 @@ export default {
   methods: {
     ...mapActions([
       'changeCurPageName',
-      'changeCurTab'
+      'changeCurTab',
+      'toggleSpinner'
     ]),
     BackLogin () {
       this.$router.push({name: 'Login'})
@@ -112,6 +113,7 @@ export default {
         return false
       }
       this.loading = true
+      this.toggleSpinner(true)
       send({
         name: '/userInsert?mobile=' + this.phoneNumber + '&fpassword=' + this.passwordAgain + '&user_name=' + this.userName + '&company_name=' + this.company,
         method: 'POST',
@@ -126,10 +128,12 @@ export default {
               message: _res.data.message
             })
             this.loading = false
+            this.toggleSpinner(false)
             break
           case 1:
             Toast.success('注册成功！')
             this.loading = false
+            this.toggleSpinner(false)
             this.$router.push({name: 'Login'})
             break
           default:
@@ -139,10 +143,12 @@ export default {
               message: _res.data.message
             })
             this.loading = false
+            this.toggleSpinner(false)
         }
       }).catch((res) => {
         Toast.fail('Interface error！')
         this.loading = false
+        this.toggleSpinner(false)
       })
     }
   }

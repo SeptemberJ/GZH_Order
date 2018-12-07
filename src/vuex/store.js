@@ -13,12 +13,14 @@ const state = {
   company: '',
   userId: '',
   role: 2,
+  spinner: false,
   jicaiList: [],
   fengbianList: [],
   lashouList: [],
   wenluList: [],
   xinghaoList: [],
-  zaoxingList: []
+  zaoxingList: [],
+  curGongXu: {}
 }
 // actions
 const actions = {
@@ -45,6 +47,12 @@ const actions = {
   },
   updateSelectList ({commit, state}, INFO) {
     commit('SelectList', INFO)
+  },
+  toggleSpinner ({commit, state}, STATUS) {
+    commit('setSpinner', STATUS)
+  },
+  updateCurGongXu ({commit, state}, INFO) {
+    commit('setCurGongXu', INFO)
   }
 }
 
@@ -73,6 +81,12 @@ const mutations = {
   },
   SelectList (state, INFO) {
     state[INFO.property] = INFO.data
+  },
+  setSpinner (state, STATUS) {
+    state.spinner = STATUS
+  },
+  setCurGongXu (state, INFO) {
+    state.curGongXu = INFO
   }
 }
 

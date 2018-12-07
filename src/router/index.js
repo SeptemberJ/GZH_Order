@@ -6,7 +6,10 @@ import Sign from '@/page/Sign'
 import ForgetPsd from '@/page/ForgetPsd'
 import ModifyPsd from '@/page/ModifyPsd'
 import Order from '@/page/Order'
+import OrderDetail from '@/page/OrderDetail'
 import Search from '@/page/Search'
+import GongXuList from '@/page/GongXuList'
+import GongXuDetail from '@/page/GongXuDetail'
 import Scan from '@/page/Scan'
 import My from '@/page/My'
 
@@ -40,9 +43,24 @@ const router = new Router({
       component: Order
     },
     {
+      path: '/OrderDetail/:id',
+      name: 'OrderDetail',
+      component: OrderDetail
+    },
+    {
       path: '/Search',
       name: 'Search',
       component: Search
+    },
+    {
+      path: '/GongXuList',
+      name: 'GongXuList',
+      component: GongXuList
+    },
+    {
+      path: '/GongXuDetail',
+      name: 'GongXuDetail',
+      component: GongXuDetail
     },
     {
       path: '/Scan',

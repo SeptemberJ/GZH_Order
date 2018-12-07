@@ -8,17 +8,26 @@
     >
       <div slot="action" @click="onSearch">搜索</div>
     </van-search>
+    <!-- <van-panel title="" desc="" status="" v-for="(item, idx) in GongxuList" style="border:1px solid #efefef;border-radius:5px;margin-top:15px;">
+      <div>
+        <van-cell title="工单号" :value="item.flsh" size="small" />
+        <van-cell title="工序" :value="item.fgongxu" size="small" />
+        <van-cell title="操作员" :value="item.fczy" size="small" />
+        <van-cell title="面积" :value="item.fmj" size="small" />
+        <van-cell title="备注" :value="item.fnote" size="small" />
+      </div>
+    </van-panel> -->
     <van-list
       v-model="loading"
       :finished="finished"
       finished-text="没有更多了"
-      @load="getOrderList"
+      @load="getGongxuList"
     >
       <van-cell is-link
-        v-for="(item, idx) in OrderList"
+        v-for="(item, idx) in GongxuList"
         :key="idx"
-        :title="item.order_name"
-        @click="GoDetail(item.id)"
+        :title="item.flsh"
+        @click="GoDetail(item)"
       />
     </van-list>
   </div>
@@ -33,23 +42,24 @@ export default {
   data () {
     return {
       keyword: '',
-      OrderList: [],
+      GongxuList: [],
       loading: false,
       finished: false
     }
   },
   created () {
-    // this.GoDetail(123)
+    this.getGongxuList()
   },
   computed: {
     ...mapState({
-      userId: state => state.userId
+      userName: state => state.userName
     })
   },
   methods: {
     ...mapActions([
       'changeCurPageName',
-      'toggleSpinner'
+      'toggleSpinner',
+      'updateCurGongXu'
     ]),
     onSearch () {
       if (this.keyword.trim() === '') {
@@ -89,10 +99,10 @@ export default {
         this.loading = false
       })
     },
-    getOrderList () {
+    getGongxuList () {
       this.toggleSpinner(true)
       send({
-        name: '/orderList?user_id=' + this.userId,
+        name: '/userGongxuList?fczy=' + this.userName,
         method: 'GET',
         data: {
         }
@@ -109,7 +119,7 @@ export default {
             })
             break
           case 1:
-            this.OrderList = _res.data.orderList
+            this.GongxuList = _res.data.userGongxuList
             this.loading = false
             this.finished = true
             this.toggleSpinner(false)
@@ -125,9 +135,10 @@ export default {
         this.toggleSpinner(false)
       })
     },
-    GoDetail (ID) {
-      this.changeCurPageName('OrderDetail')
-      this.$router.push({name: 'OrderDetail', params: { id: ID }})
+    GoDetail (Item) {
+      this.updateCurGongXu(Item)
+      this.changeCurPageName('GongXuDetail')
+      this.$router.push({name: 'GongXuDetail'})
     }
   }
 }

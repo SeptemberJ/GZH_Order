@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     // ...mapState({
-    //   register_id: state => state.register_id
+    //   spinner: state => state.spinner
     // })
   },
   methods: {
@@ -53,13 +53,17 @@ export default {
       'changeUserName',
       'changeUserPhone',
       'changeCompany',
-      'changeRole'
+      'changeRole',
+      'toggleSpinner'
     ]),
     DifferentTab (TYPE) {
+      // this.changeCurTab(2)
+      // this.$router.push({name: 'GongXuList'})
+      // this.changeCurPageName('GongXuList')
       if (TYPE === '2') {
         this.changeCurTab(2)
-        this.$router.push({name: 'Scan'})
-        this.changeCurPageName('Scan')
+        this.$router.push({name: 'GongXuList'})
+        this.changeCurPageName('GongXuList')
       } else {
         this.changeCurTab(0)
         this.$router.push({name: 'Order'})
@@ -83,6 +87,7 @@ export default {
         return false
       }
       this.loading = true
+      this.toggleSpinner(true)
       send({
         name: '/userLogin?mobile=' + this.phoneNumber + '&fpassword=' + this.password,
         method: 'POST',
@@ -97,6 +102,7 @@ export default {
               message: _res.data.message
             })
             this.loading = false
+            this.toggleSpinner(false)
             break
           case 1:
             this.changeUserId(_res.data.memberInfo.id)
@@ -106,15 +112,18 @@ export default {
             this.changeRole(_res.data.memberInfo.fstatus)
             Toast.success('登陆成功！')
             this.loading = false
+            this.toggleSpinner(false)
             this.DifferentTab(_res.data.memberInfo.fstatus)
             break
           default:
             Toast.fail('Interface error！')
             this.loading = false
+            this.toggleSpinner(false)
         }
       }).catch((res) => {
         Toast.fail('Interface error！')
         this.loading = false
+        this.toggleSpinner(false)
       })
     }
   }

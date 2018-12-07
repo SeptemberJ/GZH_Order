@@ -6,15 +6,21 @@
       right-text=""
     /> -->
     <router-view/>
-    <van-tabbar v-model="curTab" v-if="curPageName !== 'Login' && curPageName !== 'ModifyPsd'">
+    <van-tabbar v-model="curTab" v-if="curPageName !== 'Login' && curPageName !== 'ModifyPsd' && curPageName !== 'OrderDetail' && curPageName !== 'GongXuDetail'">
       <van-tabbar-item icon="records" v-show="role != 2">录入</van-tabbar-item>
       <van-tabbar-item icon="aim" v-show="role != 2">查询</van-tabbar-item>
-      <!-- <van-tabbar-item icon="qr">扫码</van-tabbar-item> -->
+      <van-tabbar-item icon="pending-orders" v-show="role == 2">工单</van-tabbar-item>
       <van-tabbar-item icon="qr" v-show="role == 2">扫码</van-tabbar-item>
+      <!-- <van-tabbar-item icon="qr" v-show="role == 2">扫码</van-tabbar-item> -->
       <van-tabbar-item icon="contact">我的</van-tabbar-item>
     </van-tabbar>
+    <!-- spinner -->
+    <div style="width: 100px;height:100px;border-radius: 5px;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#000;opacity:.6" v-if="spinner">
+      <van-loading type="spinner" color="#fff" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);"/>
+    </div>
   </div>
 </template>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
 import { mapState, mapActions } from 'vuex'
 import {MySha1} from './util/utils'
@@ -29,7 +35,8 @@ export default {
   computed: {
     ...mapState({
       curPageName: state => state.curPageName,
-      role: state => state.role
+      role: state => state.role,
+      spinner: state => state.spinner
     }),
     curTab: {
       get: function () {
@@ -52,15 +59,39 @@ export default {
           this.changeCurPageName('Search')
           break
         case 2:
+          this.$router.push({name: 'GongXuList'})
+          this.changeCurPageName('GongXuList')
+          break
+        case 3:
           this.$router.push({name: 'Scan'})
           this.changeCurPageName('Scan')
           break
-        case 3:
+        case 4:
           this.$router.push({name: 'My'})
           this.changeCurPageName('My')
           break
       }
     }
+    // curTab: function (val) {
+    //   switch (val) {
+    //     case 0:
+    //       this.$router.push({name: 'Order'})
+    //       this.changeCurPageName('Order')
+    //       break
+    //     case 1:
+    //       this.$router.push({name: 'Search'})
+    //       this.changeCurPageName('Search')
+    //       break
+    //     case 2:
+    //       this.$router.push({name: 'Scan'})
+    //       this.changeCurPageName('Scan')
+    //       break
+    //     case 3:
+    //       this.$router.push({name: 'My'})
+    //       this.changeCurPageName('My')
+    //       break
+    //   }
+    // }
   },
   created () {
     let HashString = window.location.hash

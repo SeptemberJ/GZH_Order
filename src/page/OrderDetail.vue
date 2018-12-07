@@ -1,22 +1,20 @@
 <template>
 <div>
   <!-- navbar -->
-  <van-nav-bar v-if="step == 1"
-    title="录入详情"
+  <van-nav-bar
+    title="订单详情"
     left-text=""
     right-text=""
     left-arrow
-    @click-left="PreStep"
+    @click-left="Back"
   />
-  <div v-if="step == 1" style="width:100%;height:15px;background:#efefef;"></div>
+  <div style="width:100%;height:15px;background:#efefef;"></div>
 
   <div class="Order">
-    <div class="stepOne" v-if="step == 0">
+    <div class="stepOne">
       <p class="TextAlign_L">★★★特别提示（Special Note）:</p>
       <p class="TextAlign_L PaddingL_10 SmallSize ColorR">请贵司认真录入订单，具体细节以订单为准</p>
       <van-cell-group class="TextAlign_L">
-        <!-- <van-cell title="下单人" value="张三" />
-        <van-cell title="联系电话" value="18234567890" /> -->
         <van-field
           v-model="Booking_name"
           required
@@ -29,9 +27,6 @@
           label="联系人手机号"
           placeholder="请输入联系人手机号"
         />
-        <!-- <van-cell title="收货地址" value="" /> -->
-        <!-- <van-cell title="收货人" value="李四" />
-        <van-cell title="收货人电话" value="18234567890" /> -->
       </van-cell-group>
       <!-- basic infomation -->
       <van-cell-group>
@@ -80,10 +75,9 @@
           placeholder="请输入终端安装地址"
         />
       </van-cell-group>
-      <van-button size="large" type="danger" class="MarginT_40" @click="NextStep">开始录单</van-button>
     </div>
     <!-- start write order infomation -->
-    <div class="stepOne" v-if="step == 1">
+    <div class="stepOne">
       <!-- cardTab -->
       <van-tabs>
         <!-- 吊柜 -->
@@ -289,7 +283,6 @@
           <van-button size="large" class="MarginT_20" plain type="primary" @click="addFloorCabinetItem"><span>添加一条</span></van-button>
         </van-tab>
       </van-tabs>
-      <van-button size="large" type="danger" class="MarginT_40" @click="submitOrder">提交</van-button>
     </div>
   </div>
   <!-- actionsheet -->
@@ -308,31 +301,31 @@
       @confirm="changeSelect"
     />
   </van-popup>
-
+  <van-row>
+    <van-col span="12"><van-button style="border-radius: 0;background:#666;border: 1px solid #666;" size="large" type="danger" class="MarginT_40" @click="deleteOrder">删除</van-button></van-col>
+    <van-col span="12"><van-button style="border-radius: 0;" size="large" type="danger" class="MarginT_40" @click="ModifyOrder">保存</van-button></van-col>
+  </van-row>
 </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import {send} from '../util/send'
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 export default {
   name: 'Order',
   data () {
     return {
       loading: false,
-      step: 0,
-      // username: '',
-      // phone: '',
-      Booking_name: '留白',
-      Contact_phone: '18234567893',
-      Consignee_name: '张三',
-      Consignee_phone: '18234567893',
-      Consignee_address: '上海普通区',
-      backpass: '请选择',
-      backAccount: '12345678901',
-      customerName: '上海柏田',
-      orderName: '终端安装地址',
+      Booking_name: '',
+      Contact_phone: '',
+      Consignee_name: '',
+      Consignee_phone: '',
+      Consignee_address: '',
+      backpass: '',
+      backAccount: '',
+      customerName: '',
+      orderName: '',
       showWay: false,
       showSelctList: false,
       selectList: [],
@@ -377,46 +370,23 @@ export default {
     }
   },
   created () {
+    this.initOrder()
   },
   computed: {
     ...mapState({
-      role: state => state.role
+      role: state => state.role,
+      spinner: state => state.spinner
     })
   },
   methods: {
     ...mapActions([
       'updateSelectList',
+      'changeCurPageName',
       'toggleSpinner'
     ]),
-    NextStep () {
-      if (this.Booking_name.trim() === '' || this.Contact_phone.trim() === '' || this.Consignee_name.trim() === '' || this.Consignee_phone.trim() === '' || this.Consignee_address.trim() === '' || this.backpass === '请选择' || this.backAccount.trim() === '' || this.customerName.trim() === '' || this.orderName.trim() === '') {
-        Toast.fail({
-          duration: 1500,
-          forbidClick: true,
-          message: '请将基本信息填写完整！'
-        })
-        return false
-      }
-      if (!(/^1[34578]\d{9}$/.test(this.Contact_phone.trim()))) {
-        Toast.fail({
-          duration: 1500,
-          forbidClick: true,
-          message: '联系人手机号格式不正确！'
-        })
-        return false
-      }
-      if (!(/^1[34578]\d{9}$/.test(this.Consignee_phone.trim()))) {
-        Toast.fail({
-          duration: 1500,
-          forbidClick: true,
-          message: '收货人手机号格式不正确！'
-        })
-        return false
-      }
-      this.step = 1
-    },
-    PreStep () {
-      this.step = 0
+    Back () {
+      this.changeCurPageName('Search')
+      this.$router.push({name: 'Search'})
     },
     showWayAction () {
       this.showWay = true
@@ -523,7 +493,7 @@ export default {
     addFloorCabinetItem () {
       this.FloorCabinet.items.push({'height': '', 'width': '', 'thickness': '', 'amount': '', 'doorDirection': '', 'handle': '', 'requirement': '', 'select_type': 2})
     },
-    async submitOrder () {
+    async ModifyOrder () {
       // 未审核的不能提交订单
       if (this.role === '1') {
         Toast.fail({
@@ -563,7 +533,6 @@ export default {
           }
           for (let i = 0; i < WallCupboardItems.length; i++) {
             for (let key in WallCupboardItems[i]) {
-              console.log(WallCupboardItems[i][key])
               if (WallCupboardItems[i][key] === '') {
                 Toast({
                   duration: 1500,
@@ -618,12 +587,12 @@ export default {
           'fengbian': this.FloorCabinet.basic.edgeSealing,
           'select_type': this.FloorCabinet.basic.select_type
         }
-        this.toggleSpinner(true)
         send({
-          name: '/insertOrder',
+          name: '/updateOrder',
           method: 'POST',
           data: {
             'order': {
+              'id': this.$route.params.id,
               'xdr_name': this.Booking_name,
               'xdr_telephone': this.Contact_phone,
               'shr_name': this.Consignee_name,
@@ -641,7 +610,6 @@ export default {
         }).then(_res => {
           switch (_res.data.code) {
             case 1:
-              this.toggleSpinner(false)
               Toast.fail({
                 duration: 1500,
                 forbidClick: true,
@@ -649,77 +617,34 @@ export default {
               })
               break
             case 0:
-              Toast.success('下单成功！')
-              this.toggleSpinner(false)
-              // 清空之前输入
-              this.Booking_name = ''
-              this.Contact_phone = ''
-              this.Consignee_name = ''
-              this.Consignee_phone = ''
-              this.Consignee_address = ''
-              this.backpass = ''
-              this.backAccount = ''
-              this.customerName = ''
-              this.orderName = ''
-              this.showWay = false
-              this.showSelctList = false
-              this.selectList = []
-              this.basicProperty = ''
-              this.basicKind = 0
-              this.selectKind = ''
-              this.BackWayActions = [
-                {
-                  name: 'QQ'
-                },
-                {
-                  name: '微信'
-                },
-                {
-                  name: '传真'
-                }
-              ]
-              this.WallCupboard = {
-                basic: {
-                  model: '请选择',
-                  modelling: '请选择',
-                  handle: '请选择',
-                  baseMaterial: '请选择',
-                  lines: '请选择',
-                  edgeSealing: '请选择',
-                  select_type: 1
-                },
-                items: [{'height': '', 'width': '', 'thickness': '', 'amount': '', 'doorDirection': '', 'handle': '', 'requirement': '', 'select_type': 1}]
-              }
-              this.FloorCabinet = {
-                basic: {
-                  model: '请选择',
-                  modelling: '请选择',
-                  handle: '请选择',
-                  baseMaterial: '请选择',
-                  lines: '请选择',
-                  edgeSealing: '请选择',
-                  select_type: 2
-                },
-                items: [{'height': '', 'width': '', 'thickness': '', 'amount': '', 'doorDirection': '', 'handle': '', 'requirement': '', 'select_type': 2}]
-              }
-              this.step = 0
+              Toast.success('修改成功！')
+              this.Back()
               break
             default:
-              this.toggleSpinner(false)
               Toast.fail('Interface error！')
           }
         }).catch((res) => {
-          this.toggleSpinner(false)
           Toast.fail('Interface error！')
         })
       }
+    },
+    deleteOrder () {
+      // this.toggleSpinner(true)
+      Dialog.confirm({
+        title: '标题',
+        message: '确认删除该订单？'
+      }).then(() => {
+        // on confirm
+      }).catch(() => {
+        // on cancel
+      })
     },
     // 将空的排除
     filterNull (ITEMS) {
       let TempItems = []
       return new Promise((resolve, reject) => {
         ITEMS.map((item, idx) => {
-          if (item.height.trim() === '' && item.width.trim() === '' && item.thickness.trim() === '' && item.amount.trim() === '' && item.doorDirection.trim() === '' && item.handle.trim() === '' && item.requirement.trim() === '') {
+          if (item.height === '' && item.width === '' && item.thickness === '' && item.amount === '' && item.doorDirection === '' && item.handle === '' && item.requirement === '') {
           } else {
             TempItems.push({
               'xuhao': idx + 1,
@@ -735,6 +660,98 @@ export default {
           }
         })
         resolve(TempItems)
+      })
+    },
+    // 初始化订单详情
+    initOrder () {
+      send({
+        name: '/orderdetail?order_id=' + this.$route.params.id,
+        method: 'GET',
+        data: {
+        }
+      }).then(_res => {
+        switch (_res.data.code) {
+          case 0:
+            Toast.fail({
+              duration: 1500,
+              forbidClick: true,
+              message: _res.data.message
+            })
+            break
+          case 1:
+            let WallCupboardItems = []
+            let FloorCabinetItems = []
+            let OrderInfo = _res.data
+            OrderInfo.orderEntry1List.map((item) => {
+              WallCupboardItems.push({
+                'height': item.height,
+                'width': item.width,
+                'thickness': item.houdu,
+                'amount': item.fnumber,
+                'doorDirection': item.open_door,
+                'handle': item.lashou,
+                'requirement': item.require,
+                'select_type': 1
+              })
+            })
+            OrderInfo.orderEntry2List.map((item) => {
+              FloorCabinetItems.push({
+                'height': item.height,
+                'width': item.width,
+                'thickness': item.houdu,
+                'amount': item.fnumber,
+                'doorDirection': item.open_door,
+                'handle': item.lashou,
+                'requirement': item.require,
+                'select_type': 2
+              })
+            })
+            // 初始化订单信息
+            this.Booking_name = OrderInfo.order.xdr_name
+            this.Contact_phone = OrderInfo.order.xdr_telephone
+            this.Consignee_name = OrderInfo.order.shr_name
+            this.Consignee_phone = OrderInfo.order.shr_telephone
+            this.Consignee_address = OrderInfo.order.faddress
+            this.backpass = OrderInfo.order.xd_type
+            this.backAccount = OrderInfo.order.xd_contact
+            this.customerName = OrderInfo.order.kh_name
+            this.orderName = OrderInfo.order.order_name
+            this.showWay = false
+            this.showSelctList = false
+            this.selectList = []
+            this.basicProperty = ''
+            this.basicKind = 0
+            this.selectKind = ''
+            this.WallCupboard = {
+              basic: {
+                model: OrderInfo.orderSelect1.xinghao,
+                modelling: OrderInfo.orderSelect1.zaoxing,
+                handle: OrderInfo.orderSelect1.lashou,
+                baseMaterial: OrderInfo.orderSelect1.jicai,
+                lines: OrderInfo.orderSelect1.wenlu,
+                edgeSealing: OrderInfo.orderSelect1.fengbian,
+                select_type: 1
+              },
+              items: WallCupboardItems
+            }
+            this.FloorCabinet = {
+              basic: {
+                model: OrderInfo.orderSelect2.xinghao,
+                modelling: OrderInfo.orderSelect2.zaoxing,
+                handle: OrderInfo.orderSelect2.lashou,
+                baseMaterial: OrderInfo.orderSelect2.jicai,
+                lines: OrderInfo.orderSelect2.wenlu,
+                edgeSealing: OrderInfo.orderSelect2.fengbian,
+                select_type: 2
+              },
+              items: FloorCabinetItems
+            }
+            break
+          default:
+            Toast.fail('Interface error！')
+        }
+      }).catch((res) => {
+        Toast.fail('Interface error！')
       })
     }
   }

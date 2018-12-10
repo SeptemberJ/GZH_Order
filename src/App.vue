@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <!-- <h2>{{curPageName}}</h2>
+    <h2>{{curTab}}</h2> -->
     <!-- <van-nav-bar
       title="梵家全屋定制智能订单系统"
       left-text=""
@@ -53,23 +55,32 @@ export default {
         case 0:
           this.$router.push({name: 'Order'})
           this.changeCurPageName('Order')
+          this.changeCurTab(0)
           break
         case 1:
           this.$router.push({name: 'Search'})
           this.changeCurPageName('Search')
+          this.changeCurTab(1)
           break
         case 2:
           this.$router.push({name: 'GongXuList'})
           this.changeCurPageName('GongXuList')
+          this.changeCurTab(2)
           break
         case 3:
           this.$router.push({name: 'Scan'})
           this.changeCurPageName('Scan')
+          this.changeCurTab(3)
           break
         case 4:
           this.$router.push({name: 'My'})
           this.changeCurPageName('My')
+          this.changeCurTab(4)
           break
+        default:
+          this.$router.push({name: 'Login'})
+          this.changeCurPageName('Login')
+          this.changeCurTab(-1)
       }
     }
     // curTab: function (val) {
@@ -94,23 +105,23 @@ export default {
     // }
   },
   created () {
-    let HashString = window.location.hash
-    if (HashString.indexOf('Order') !== -1) {
-      this.changeCurTab(0)
-      this.changeCurPageName('Order')
-    } else if (HashString.indexOf('Search') !== -1) {
-      this.changeCurTab(1)
-      this.changeCurPageName('Search')
-    } else if (HashString.indexOf('Scan') !== -1) {
-      this.changeCurTab(2)
-      this.changeCurPageName('Scan')
-    } else if (HashString.indexOf('My') !== -1) {
-      this.changeCurTab(3)
-      this.changeCurPageName('My')
-    } else {
-      this.changeCurTab(-1)
-      this.changeCurPageName('Login')
-    }
+    // let HashString = window.location.hash
+    // if (HashString.indexOf('Order') !== -1) {
+    //   this.changeCurTab(0)
+    //   this.changeCurPageName('Order')
+    // } else if (HashString.indexOf('Search') !== -1) {
+    //   this.changeCurTab(1)
+    //   this.changeCurPageName('Search')
+    // } else if (HashString.indexOf('Scan') !== -1) {
+    //   this.changeCurTab(2)
+    //   this.changeCurPageName('Scan')
+    // } else if (HashString.indexOf('My') !== -1) {
+    //   this.changeCurTab(3)
+    //   this.changeCurPageName('My')
+    // } else {
+    //   this.changeCurTab(-1)
+    //   this.changeCurPageName('Login')
+    // }
     // 获取select选项
     this.getSelectList()
     // 配置
@@ -159,7 +170,7 @@ export default {
       var mysignature = 'jsapi_ticket=' + JsapiTicket + '&noncestr=' + mynonceStr + '&timestamp=' + mytimestamp + '&url=' + window.location.href.split("#")[0]
       wx.config({
         beta: true,
-        debug: true,
+        debug: false,
         appId: 'wx1b0ae914875f576f',
         timestamp: mytimestamp,
         nonceStr: mynonceStr,

@@ -1,5 +1,5 @@
 <template>
-  <div class="Search">
+  <div class="GongXuDetail">
     <van-nav-bar
       title="订单详情"
       left-text=""
@@ -22,7 +22,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 export default {
-  name: 'Search',
+  name: 'GongXuDetail',
   data () {
     return {
     }
@@ -47,8 +47,11 @@ export default {
 }
 </script>
 
-<style scoped>
-.Search{
+<style>
+.GongXuDetail{
   padding: 10px;
+}
+.van-cell__title{
+  text-align: left !important;
 }
 </style>

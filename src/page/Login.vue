@@ -34,8 +34,8 @@ export default {
   data () {
     return {
       loading: false,
-      phoneNumber: '18234567893',
-      password: '333'
+      phoneNumber: '',
+      password: ''
     }
   },
   created () {
@@ -109,10 +109,16 @@ export default {
             this.changeUserName(_res.data.memberInfo.user_name)
             this.changeUserPhone(_res.data.memberInfo.fmobile)
             this.changeCompany(_res.data.memberInfo.company_name)
+            // this.changeRole(2)
             this.changeRole(_res.data.memberInfo.fstatus)
-            Toast.success('登陆成功！')
+            Toast.success({
+              duration: 1000,
+              forbidClick: true,
+              message: '登陆成功！'
+            })
             this.loading = false
             this.toggleSpinner(false)
+            // this.DifferentTab('2')
             this.DifferentTab(_res.data.memberInfo.fstatus)
             break
           default:

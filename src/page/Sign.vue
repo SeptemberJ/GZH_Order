@@ -61,11 +61,11 @@ export default {
   data () {
     return {
       loading: false,
-      phoneNumber: '18234567890',
-      userName: '留白',
-      company: '柏田',
-      password: '111',
-      passwordAgain: '111'
+      phoneNumber: '',
+      userName: '',
+      company: '',
+      password: '',
+      passwordAgain: ''
     }
   },
   created () {
@@ -155,7 +155,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .Sign{
   padding: 0px 20px;
 }
@@ -164,5 +164,8 @@ export default {
   color: #fff;
   height: 40px !important;
   line-height: 39px !important;
+}
+.van-field__control{
+  text-align: right !important;
 }
 </style>

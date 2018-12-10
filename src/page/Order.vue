@@ -85,7 +85,7 @@
     <!-- start write order infomation -->
     <div class="stepOne" v-if="step == 1">
       <!-- cardTab -->
-      <van-tabs>
+      <van-tabs @click="tabClick">
         <!-- 吊柜 -->
         <van-tab title="吊柜">
           <van-row class="WallCupboard MarginT_20 SmallSize_14" style="height: 50px;">
@@ -324,15 +324,15 @@ export default {
       step: 0,
       // username: '',
       // phone: '',
-      Booking_name: '留白',
-      Contact_phone: '18234567893',
-      Consignee_name: '张三',
-      Consignee_phone: '18234567893',
-      Consignee_address: '上海普通区',
+      Booking_name: '',
+      Contact_phone: '',
+      Consignee_name: '',
+      Consignee_phone: '',
+      Consignee_address: '',
       backpass: '请选择',
-      backAccount: '12345678901',
-      customerName: '上海柏田',
-      orderName: '终端安装地址',
+      backAccount: '',
+      customerName: '',
+      orderName: '',
       showWay: false,
       showSelctList: false,
       selectList: [],
@@ -735,6 +735,40 @@ export default {
           }
         })
         resolve(TempItems)
+      })
+    },
+    tabClick (tabIdx) {
+      this.initXinghaoList(tabIdx)
+    },
+    // 初始化xinghaoList
+    initXinghaoList (KIND) {
+      send({
+        name: '/xinghaoList?fname=' + (KIND === 0 ? this.WallCupboard.basic.baseMaterial : this.FloorCabinet.basic.baseMaterial),
+        method: 'GET',
+        data: {
+        }
+      }).then(_res => {
+        switch (_res.data.code) {
+          case 0:
+            Toast.fail({
+              duration: 1500,
+              forbidClick: true,
+              message: _res.data.message
+            })
+            break
+          case 1:
+            let temp = []
+            _res.data.xinghaoList.map((item) => {
+              temp.push(item.fname)
+            })
+            this.updateSelectList({'property': 'xinghaoList', 'data': temp})
+            // this.WallCupboard.basic.model = '请选择'
+            break
+          default:
+            Toast.fail('Interface error！')
+        }
+      }).catch((res) => {
+        Toast.fail('Interface error！')
       })
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="Search">
+  <div class="GongxuList">
     <van-search
       v-model="keyword"
       placeholder="请输入搜索关键词"
@@ -38,7 +38,7 @@ import { mapState, mapActions } from 'vuex'
 import {send} from '../util/send'
 import { Toast } from 'vant'
 export default {
-  name: 'Search',
+  name: 'GongxuList',
   data () {
     return {
       keyword: '',
@@ -144,8 +144,12 @@ export default {
 }
 </script>
 
-<style scoped>
-.Search{
+<style>
+.GongxuList{
   padding: 10px;
 }
+.van-cell__title{
+  text-align: left !important;
+}
+
 </style>

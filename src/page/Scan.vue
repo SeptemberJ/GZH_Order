@@ -66,7 +66,7 @@ export default {
   name: 'Scan',
   data () {
     return {
-      orderNumber: 'DD160325004', // '点击图标扫描',
+      orderNumber: '点击图标扫描', // '点击图标扫描',
       gongxu: '请选择',
       scanDate: '',
       area: '',
@@ -95,8 +95,7 @@ export default {
         needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
         scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
         success: (res) => {
-          var result = res.resultStr
-          alert (result)
+          this.orderNumber = res.resultStr
         }
       })
     },
@@ -147,6 +146,14 @@ export default {
       }).then(_res => {
         switch (_res.data.code) {
           case 1:
+            this.toggleSpinner(false)
+            Toast.fail({
+              duration: 1500,
+              forbidClick: true,
+              message: _res.data.message
+            })
+            break
+          case 2:
             this.toggleSpinner(false)
             Toast.fail({
               duration: 1500,

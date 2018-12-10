@@ -18,12 +18,14 @@
         <van-field
           v-model="Booking_name"
           required
+          :disabled="orderStatus != 0"
           label="下单人"
           placeholder="请输入下单人姓名"
         />
         <van-field
           v-model="Contact_phone"
           required
+          :disabled="orderStatus != 0"
           label="联系人手机号"
           placeholder="请输入联系人手机号"
         />
@@ -33,25 +35,28 @@
         <van-field
           v-model="Consignee_name"
           required
+          :disabled="orderStatus != 0"
           label="收货人"
           placeholder="请输入收货人姓名"
         />
         <van-field
           v-model="Consignee_phone"
           required
+          :disabled="orderStatus != 0"
           label="收货人电话"
           placeholder="请输入收货人电话"
         />
         <van-field
           v-model="Consignee_address"
           required
+          :disabled="orderStatus != 0"
           label="收货地址"
           placeholder="请输入收货地址"
         />
         <van-field
           v-model="backpass"
           required
-          disabled
+          :disabled="orderStatus != 0"
           label="选择回传方式"
           icon="arrow"
           @click-icon="showWayAction()"
@@ -59,18 +64,21 @@
         <van-field
           v-model="backAccount"
           required
+          :disabled="orderStatus != 0"
           label="回传账号"
           placeholder="请输入回传账号"
         />
         <van-field
           v-model="customerName"
           required
+          :disabled="orderStatus != 0"
           label="客户名称"
           placeholder="格式：地区+姓名"
         />
         <van-field
           v-model="orderName"
           required
+          :disabled="orderStatus != 0"
           label="订单名称"
           placeholder="请输入终端安装地址"
         />
@@ -79,7 +87,7 @@
     <!-- start write order infomation -->
     <div class="stepOne">
       <!-- cardTab -->
-      <van-tabs>
+      <van-tabs @click="tabClick">
         <!-- 吊柜 -->
         <van-tab title="吊柜">
           <van-row class="WallCupboard MarginT_20 SmallSize_14" style="height: 50px;">
@@ -161,25 +169,25 @@
           <van-row v-for="(itemW, idxW) in WallCupboard.items" :key="idxW" class="WallCupboardItem SmallSize_14" style="height: 50px;border-top: 0px solid #000;border-bottom: 1px solid #000;">
             <van-col class="column" span="2">{{idxW + 1}}</van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.height" type="number"/>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.height" type="number"/>
             </van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.width" type="number"/>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.width" type="number"/>
             </van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.thickness" type="number"/>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.thickness" type="number"/>
             </van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.amount" type="number"/>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.amount" type="number"/>
             </van-col>
             <van-col class="column" span="2">
-              <van-field v-model="itemW.doorDirection" /></van-col>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.doorDirection" /></van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.handle" /></van-col>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.handle" /></van-col>
             <van-col class="column" span="5">
-              <van-field v-model="itemW.requirement" autosize  type="textarea" rows="1" style="height: 49px;overflow:hidden"/></van-col>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.requirement" autosize  type="textarea" rows="1" style="height: 49px;overflow:hidden"/></van-col>
           </van-row>
-          <van-button size="large" class="MarginT_20" plain type="primary" @click="addWallCupboardItem"><span>添加一条</span></van-button>
+          <van-button v-if="orderStatus == 0" size="large" class="MarginT_20" plain type="primary" @click="addWallCupboardItem"><span>添加一条</span></van-button>
         </van-tab>
         <!-- 地柜 -->
         <van-tab title="地柜">
@@ -262,25 +270,25 @@
           <van-row v-for="(itemW, idxW) in FloorCabinet.items" :key="idxW" class="FloorCabinetItem SmallSize_14" style="height: 50px;border-top: 0px solid #000;border-bottom: 1px solid #000;">
             <van-col class="column" span="2">{{idxW + 1}}</van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.height" type="number"/>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.height" type="number"/>
             </van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.width" type="number"/>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.width" type="number"/>
             </van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.thickness" type="number"/>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.thickness" type="number"/>
             </van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.amount" type="number"/>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.amount" type="number"/>
             </van-col>
             <van-col class="column" span="2">
-              <van-field v-model="itemW.doorDirection" /></van-col>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.doorDirection" /></van-col>
             <van-col class="column" span="3">
-              <van-field v-model="itemW.handle" /></van-col>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.handle" /></van-col>
             <van-col class="column" span="5">
-              <van-field v-model="itemW.requirement" autosize  type="textarea" rows="1" style="height: 49px;overflow:hidden"/></van-col>
+              <van-field :disabled="orderStatus != 0" v-model="itemW.requirement" autosize  type="textarea" rows="1" style="height: 49px;overflow:hidden"/></van-col>
           </van-row>
-          <van-button size="large" class="MarginT_20" plain type="primary" @click="addFloorCabinetItem"><span>添加一条</span></van-button>
+          <van-button v-if="orderStatus == 0" size="large" class="MarginT_20" plain type="primary" @click="addFloorCabinetItem"><span>添加一条</span></van-button>
         </van-tab>
       </van-tabs>
     </div>
@@ -302,8 +310,9 @@
     />
   </van-popup>
   <van-row>
-    <van-col span="12"><van-button style="border-radius: 0;background:#666;border: 1px solid #666;" size="large" type="danger" class="MarginT_40" @click="deleteOrder">删除</van-button></van-col>
-    <van-col span="12"><van-button style="border-radius: 0;" size="large" type="danger" class="MarginT_40" @click="ModifyOrder">保存</van-button></van-col>
+    <van-col v-if="orderStatus == 0" span="12"><van-button style="border-radius: 0;background:#666;border: 1px solid #666;" size="large" type="danger" class="MarginT_40" @click="deleteOrder">删除</van-button></van-col>
+    <van-col v-if="orderStatus == 0" span="12"><van-button style="border-radius: 0;" size="large" type="danger" class="MarginT_40" @click="ModifyOrder">保存</van-button></van-col>
+    <van-col v-if="orderStatus == 1" span="24" style="position:fixed;left:0;bottom:0;"><van-button style="border-radius: 0;" size="large" type="danger" class="MarginT_40">该订单已通过审核不能经行修改</van-button></van-col>
   </van-row>
 </div>
 </template>
@@ -332,6 +341,7 @@ export default {
       basicProperty: '',
       basicKind: 0,
       selectKind: '',
+      orderStatus: 0,
       BackWayActions: [
         {
           name: 'QQ'
@@ -382,31 +392,36 @@ export default {
     ...mapActions([
       'updateSelectList',
       'changeCurPageName',
-      'toggleSpinner'
+      'toggleSpinner',
+      'changeCurTab'
     ]),
     Back () {
       this.changeCurPageName('Search')
       this.$router.push({name: 'Search'})
     },
     showWayAction () {
-      this.showWay = true
+      if (this.orderStatus === '0') {
+        this.showWay = true
+      }
     },
     showSelectListAction (TYPE, KIND, PROPERTY) {
-      if (KIND === 'xinghaoList') {
-        if (this.$store.state[KIND].length === 0) {
-          Toast.fail({
-            duration: 1500,
-            forbidClick: true,
-            message: '请先选择基材!'
-          })
-          return false
+      if (this.orderStatus === '0') {
+        if (KIND === 'xinghaoList') {
+          if (this.$store.state[KIND].length === 0) {
+            Toast.fail({
+              duration: 1500,
+              forbidClick: true,
+              message: '请先选择基材!'
+            })
+            return false
+          }
         }
+        this.selectList = this.$store.state[KIND]
+        this.showSelctList = true
+        this.selectKind = KIND
+        this.basicKind = TYPE
+        this.basicProperty = PROPERTY
       }
-      this.selectList = this.$store.state[KIND]
-      this.showSelctList = true
-      this.selectKind = KIND
-      this.basicKind = TYPE
-      this.basicProperty = PROPERTY
     },
     onSelectBackWay (item) {
       this.showWay = false
@@ -635,8 +650,45 @@ export default {
         message: '确认删除该订单？'
       }).then(() => {
         // on confirm
+        this.toggleSpinner(true)
+        send({
+          name: '/delOrder?orderid=' + this.$route.params.id,
+          method: 'DELETE',
+          data: {
+          }
+        }).then(_res => {
+          switch (_res.data.code) {
+            case 1:
+              Toast.fail({
+                duration: 1500,
+                forbidClick: true,
+                message: _res.data.message
+              })
+              this.toggleSpinner(false)
+              break
+            case 0:
+              this.toggleSpinner(false)
+              Toast.success({
+                duration: 1000,
+                forbidClick: true,
+                message: '删除成功!'
+              })
+              this.$router.push({name: 'Search'})
+              this.changeCurPageName('Search')
+              this.changeCurTab(1)
+              break
+            default:
+              console.log(_res)
+              Toast.fail('Interface error！')
+              this.toggleSpinner(false)
+          }
+        }).catch((res) => {
+          console.log(res)
+          Toast.fail('Interface error！')
+          this.toggleSpinner(false)
+        })
       }).catch(() => {
-        // on cancel
+      // on cancel
       })
     },
     // 将空的排除
@@ -682,30 +734,35 @@ export default {
             let WallCupboardItems = []
             let FloorCabinetItems = []
             let OrderInfo = _res.data
-            OrderInfo.orderEntry1List.map((item) => {
-              WallCupboardItems.push({
-                'height': item.height,
-                'width': item.width,
-                'thickness': item.houdu,
-                'amount': item.fnumber,
-                'doorDirection': item.open_door,
-                'handle': item.lashou,
-                'requirement': item.require,
-                'select_type': 1
+            this.orderStatus = OrderInfo.order.fstatus
+            if (OrderInfo.orderEntry1List.length > 0) {
+              OrderInfo.orderEntry1List.map((item) => {
+                WallCupboardItems.push({
+                  'height': item.height,
+                  'width': item.width,
+                  'thickness': item.houdu,
+                  'amount': item.fnumber,
+                  'doorDirection': item.open_door,
+                  'handle': item.lashou,
+                  'requirement': item.require,
+                  'select_type': 1
+                })
               })
-            })
-            OrderInfo.orderEntry2List.map((item) => {
-              FloorCabinetItems.push({
-                'height': item.height,
-                'width': item.width,
-                'thickness': item.houdu,
-                'amount': item.fnumber,
-                'doorDirection': item.open_door,
-                'handle': item.lashou,
-                'requirement': item.require,
-                'select_type': 2
+            }
+            if (OrderInfo.orderEntry2List.length > 0) {
+              OrderInfo.orderEntry2List.map((item) => {
+                FloorCabinetItems.push({
+                  'height': item.height,
+                  'width': item.width,
+                  'thickness': item.houdu,
+                  'amount': item.fnumber,
+                  'doorDirection': item.open_door,
+                  'handle': item.lashou,
+                  'requirement': item.require,
+                  'select_type': 2
+                })
               })
-            })
+            }
             // 初始化订单信息
             this.Booking_name = OrderInfo.order.xdr_name
             this.Contact_phone = OrderInfo.order.xdr_telephone
@@ -724,28 +781,65 @@ export default {
             this.selectKind = ''
             this.WallCupboard = {
               basic: {
-                model: OrderInfo.orderSelect1.xinghao,
-                modelling: OrderInfo.orderSelect1.zaoxing,
-                handle: OrderInfo.orderSelect1.lashou,
-                baseMaterial: OrderInfo.orderSelect1.jicai,
-                lines: OrderInfo.orderSelect1.wenlu,
-                edgeSealing: OrderInfo.orderSelect1.fengbian,
+                model: OrderInfo.orderSelect1 ? OrderInfo.orderSelect1.xinghao : '请选择',
+                modelling: OrderInfo.orderSelect1 ? OrderInfo.orderSelect1.zaoxing : '请选择',
+                handle: OrderInfo.orderSelect1 ? OrderInfo.orderSelect1.lashou : '请选择',
+                baseMaterial: OrderInfo.orderSelect1 ? OrderInfo.orderSelect1.jicai : '请选择',
+                lines: OrderInfo.orderSelect1 ? OrderInfo.orderSelect1.wenlu : '请选择',
+                edgeSealing: OrderInfo.orderSelect1 ? OrderInfo.orderSelect1.fengbian : '请选择',
                 select_type: 1
               },
               items: WallCupboardItems
             }
             this.FloorCabinet = {
               basic: {
-                model: OrderInfo.orderSelect2.xinghao,
-                modelling: OrderInfo.orderSelect2.zaoxing,
-                handle: OrderInfo.orderSelect2.lashou,
-                baseMaterial: OrderInfo.orderSelect2.jicai,
-                lines: OrderInfo.orderSelect2.wenlu,
-                edgeSealing: OrderInfo.orderSelect2.fengbian,
+                model: OrderInfo.orderSelect2 ? OrderInfo.orderSelect2.xinghao : '请选择',
+                modelling: OrderInfo.orderSelect2 ? OrderInfo.orderSelect2.zaoxing : '请选择',
+                handle: OrderInfo.orderSelect2 ? OrderInfo.orderSelect2.lashou : '请选择',
+                baseMaterial: OrderInfo.orderSelect2 ? OrderInfo.orderSelect2.jicai : '请选择',
+                lines: OrderInfo.orderSelect2 ? OrderInfo.orderSelect2.wenlu : '请选择',
+                edgeSealing: OrderInfo.orderSelect2 ? OrderInfo.orderSelect2.fengbian : '请选择',
                 select_type: 2
               },
               items: FloorCabinetItems
             }
+            this.initXinghaoList(0)
+            break
+          default:
+            console.log()
+            Toast.fail('Interface error！')
+        }
+      }).catch((res) => {
+        console.log(res)
+        Toast.fail('Interface error！')
+      })
+    },
+    tabClick (tabIdx) {
+      this.initXinghaoList(tabIdx)
+    },
+    // 初始化xinghaoList
+    initXinghaoList (KIND) {
+      send({
+        name: '/xinghaoList?fname=' + (KIND === 0 ? this.WallCupboard.basic.baseMaterial : this.FloorCabinet.basic.baseMaterial),
+        method: 'GET',
+        data: {
+        }
+      }).then(_res => {
+        switch (_res.data.code) {
+          case 0:
+            Toast.fail({
+              duration: 1500,
+              forbidClick: true,
+              message: _res.data.message
+            })
+            break
+          case 1:
+            let temp = []
+            _res.data.xinghaoList.map((item) => {
+              temp.push(item.fname)
+            })
+            this.updateSelectList({'property': 'xinghaoList', 'data': temp})
+            // this.WallCupboard.basic.model = '请选择'
             break
           default:
             Toast.fail('Interface error！')

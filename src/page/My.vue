@@ -252,8 +252,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .My{
   padding: 20px;
+}
+
+.van-field__control{
+  text-align: right !important;
 }
 </style>

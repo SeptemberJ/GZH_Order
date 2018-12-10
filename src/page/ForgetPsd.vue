@@ -138,7 +138,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .Sign{
   padding: 0px 20px;
 }
@@ -147,5 +147,8 @@ export default {
   color: #fff;
   height: 40px !important;
   line-height: 39px !important;
+}
+.van-field__control{
+  text-align: right !important;
 }
 </style>
